@@ -3,5 +3,51 @@
 
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function (obj) {
-  // your code goes here
+  
+  var type = typeof obj;
+  var result = '';
+
+  if(type=="boolean"){
+  	result = obj.toString();
+  }else if(type=="string"){
+  	result = '"' + obj + '"';
+  }else if(type == "number"){
+  	result = '' + obj + '';
+  //}else if(type == "function"){
+  	//result = '{}';
+  }else if(type == "undefined"){
+  	result = "";
+  }else if(type == "object"){
+  	if(Array.isArray(obj)){
+  		result = '['
+  		for(var x in obj){
+  			result = result + stringifyJSON(obj[x]) + ',';
+  		}
+  		if(result.length > 1){
+  			result = result.slice(0, -1);
+  		}
+  		result += ']';	
+  	}else if(obj==null){
+  		result = 'null';
+  	}else{
+  		result = '{'
+  		
+  		for(var y in obj){
+  			var keyType = typeof obj[y];
+  			if(keyType == 'function'){
+  				return '{}'
+  			}
+  			result += stringifyJSON(y) + ':' + stringifyJSON(obj[y]) + ',';
+  			
+  		}
+  		if(result.length > 1){
+  			result = result.slice(0, -1);
+  		}
+  		result += '}';
+  	}
+  }else{
+  	result = obj.toString();
+  }
+
+  return result;
 };
