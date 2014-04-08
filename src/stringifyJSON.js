@@ -21,7 +21,11 @@ var stringifyJSON = function (obj) {
   	if(Array.isArray(obj)){
   		result = '['
   		for(var x in obj){
-  			result = result + stringifyJSON(obj[x]) + ',';
+        if((typeof obj[x]== 'function')||(typeof obj[x] == 'undefined')){
+          result += '';
+        }else{
+  			 result = result + stringifyJSON(obj[x]) + ',';
+        }
   		}
   		if(result.length > 1){
   			result = result.slice(0, -1);
@@ -34,11 +38,11 @@ var stringifyJSON = function (obj) {
   		
   		for(var y in obj){
   			var keyType = typeof obj[y];
-  			if(keyType == 'function'){
-  				return '{}'
+  			if((keyType == 'function')||(keyType == 'undefined')){
+  				result += '';
+  			}else{
+  			 result += stringifyJSON(y) + ':' + stringifyJSON(obj[y]) + ',';
   			}
-  			result += stringifyJSON(y) + ':' + stringifyJSON(obj[y]) + ',';
-  			
   		}
   		if(result.length > 1){
   			result = result.slice(0, -1);
