@@ -3,55 +3,35 @@
 
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function (obj) {
-  
+  // your code goes here
   var type = typeof obj;
-  var result = '';
 
-  if(type=="boolean"){
-  	result = obj.toString();
-  }else if(type=="string"){
-  	result = '"' + obj + '"';
-  }else if(type == "number"){
-  	result = '' + obj + '';
-  //}else if(type == "function"){
-  	//result = '{}';
-  }else if(type == "undefined"){
-  	result = "";
-  }else if(type == "object"){
-  	if(Array.isArray(obj)){
-  		result = '['
-  		for(var x in obj){
-        if((typeof obj[x]== 'function')||(typeof obj[x] == 'undefined')){
-          result += '';
+  if((type=== 'number')||(type==='boolean')){
+    return String(obj);
+  }else if(type==='string'){
+    return '"' + obj + '"';
+  }else if(type === 'object'){
+    if(Array.isArray(obj)){
+      var arr = [];
+
+      for(var i =0;i<obj.length;i++){
+        if(obj[i]!==undefined){
+          arr.push(stringifyJSON(obj[i]));
         }else{
-  			 result = result + stringifyJSON(obj[x]) + ',';
+          arr.push('null');
         }
-  		}
-  		if(result.length > 1){
-  			result = result.slice(0, -1);
-  		}
-  		result += ']';	
-  	}else if(obj==null){
-  		result = 'null';
-  	}else{
-  		result = '{'
-  		
-  		for(var y in obj){
-  			var keyType = typeof obj[y];
-  			if((keyType == 'function')||(keyType == 'undefined')){
-  				result += '';
-  			}else{
-  			 result += stringifyJSON(y) + ':' + stringifyJSON(obj[y]) + ',';
-  			}
-  		}
-  		if(result.length > 1){
-  			result = result.slice(0, -1);
-  		}
-  		result += '}';
-  	}
-  }else{
-  	result = obj.toString();
+      }
+      return "["+arr.join(',')+"]";
+    }else if(obj===null){
+      return String(obj);
+    }else{
+      var arr2 = [];
+      for(var i in obj){
+        if((obj[i]!==undefined)&&(typeof obj[i]!=="function")){
+         arr2.push(stringifyJSON(i)+':'+stringifyJSON(obj[i]));
+        }
+      }
+      return "{" + arr2.join(',') + "}";
+    }
   }
-
-  return result;
 };

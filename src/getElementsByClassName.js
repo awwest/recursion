@@ -4,29 +4,21 @@
 // };
 
 // But in stead we're going to implement it from scratch:
-var getElementsByClassName = function (className) {
-  
-  var elements = [];
-  var classNames = className.split(" ");
+var getElementsByClassName = function (className, node) {
+  // your code here
+  var results = [];
 
-  var getElements = function(element){
-  	var classes = element.classList;
+  node = node || document.body;
 
-  	for(var i=0; i<classNames.length; i++){
-      if(element instanceof HTMLElement){
-  		  if(classes.contains(classNames[i])){
-  		  	elements.push(element);
-  		  }
-      }
-  	}
-  	if(element.hasChildNodes()){
-  		for(var child = 0; child<element.childNodes.length; child++){
-  			getElements(element.childNodes[child]);
-  		}
-  	}
+  if (node.classList.contains(className)){
+    results.push(node);
   }
 
-  getElements(document.body);
+  if(node.children){
+    for(var i = 0; i < node.children.length; i++){
+      results = results.concat(getElementsByClassName(className ,node.children[i]));
+    }
+  }
 
-  return elements;
+  return results;
 };
